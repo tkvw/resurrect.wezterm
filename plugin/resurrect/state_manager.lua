@@ -67,7 +67,11 @@ function pub.periodic_save(opts)
 	wezterm.time.call_after(opts.interval_seconds, function()
 		wezterm.emit("resurrect.state_manager.periodic_save.start", opts)
 		if opts.save_workspaces then
-			pub.save_state(require("resurrect.workspace_state").get_workspace_state())
+			local workspace_state = require("resurrect.workspace_state").get_workspace_state()
+			pub.save_state(workspace_state)
+			if opts.save_current_state then
+				pub.write_current_state(workspace_state.workspace, "workspace")
+			end
 		end
 
 		if opts.save_windows then
