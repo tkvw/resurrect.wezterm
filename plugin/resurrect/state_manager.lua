@@ -39,9 +39,16 @@ end
 ---@return table
 function pub.load_state(name, type)
 	wezterm.emit("resurrect.state_manager.load_state.start", name, type)
-	local json = file_io.load_json(get_file_path(name, type))
+	local file_path = get_file_path(name, type)
+	local ok, err = io.open(file_path, "r")
+	if not ok then
+		return nil
+	end
+	ok:close()
+
+	local json = file_io.load_json(file_path)
 	if not json then
-		wezterm.emit("resurrect.error", "Invalid json: " .. get_file_path(name, type))
+		wezterm.emit("resurrect.error", "Invalid json: " .. file_path)
 		return {}
 	end
 	wezterm.emit("resurrect.state_manager.load_state.finished", name, type)
