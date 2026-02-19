@@ -108,6 +108,17 @@ function pub.write_current_state(name, type)
 	return suc, err
 end
 
+---Clear current state
+---@return boolean
+---@return string|nil
+function pub.clear_current_state()
+	wezterm.log_info("Clearing current state")
+	local file_path = pub.save_state_dir .. utils.separator .. "current_state"
+	local suc, err = file_io.write_file(file_path, "")
+	return suc, err
+end
+
+
 ---callback for resurrecting workspaces on startup
 ---@return boolean
 ---@return string|nil
